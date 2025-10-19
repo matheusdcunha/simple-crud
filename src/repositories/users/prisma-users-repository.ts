@@ -5,7 +5,7 @@ import type {
 	UsersRepositoryInterface,
 } from "./users-repository-interface";
 
-class PrismaUserRepository implements UsersRepositoryInterface {
+export class PrismaUsersRepository implements UsersRepositoryInterface {
 	async createUser(data: CreateUserData) {
 		const { email, name, password } = data;
 
@@ -24,6 +24,12 @@ class PrismaUserRepository implements UsersRepositoryInterface {
 
 	async findUserByEmail(email: string): Promise<User | null> {
 		const user = await prisma.user.findFirst({ where: { email } });
+
+		return user;
+	}
+
+	async findUserById(id: string): Promise<User | null> {
+		const user = await prisma.user.findFirst({ where: { id } });
 
 		return user;
 	}
