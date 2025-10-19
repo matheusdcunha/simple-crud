@@ -25,6 +25,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },
+  "prisma":{
+    "seed": "tsx prisma/seed.ts"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
     "@types/bcryptjs": "2.4.6",
