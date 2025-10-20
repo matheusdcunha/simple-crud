@@ -11,4 +11,5 @@ app
 	.then(() => {
 		console.log(`🌊 HTTP Server Running on port: ${port}`);
 		console.log(`🌐 http://localhost:${port}`);
+		console.log(`📃 Swagger Docs -> http://localhost:${port}/docs`);
 	});
