@@ -1,6 +1,7 @@
 import { fastifyCors } from "@fastify/cors";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
+import scalarApiReference from "@scalar/fastify-api-reference";
 import fastify from "fastify";
 import {
 	jsonSchemaTransform,
@@ -29,9 +30,18 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 });
 
+app.register(AppRoutes);
+
 app.register(fastifySwaggerUi, { routePrefix: "/docs" });
 
-app.register(AppRoutes);
+app.register(scalarApiReference, {
+	routePrefix: "/reference",
+	configuration: {
+		spec: {
+			url: "/docs/json",
+		},
+	},
+});
 
 app.setErrorHandler((error, _, reply) => {
 	if (error instanceof ZodError) {
