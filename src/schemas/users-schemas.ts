@@ -11,6 +11,7 @@ export const userIdSchema = z.object({
 });
 
 export const userBodySchema = z.object({
+	id: z.uuidv4(),
 	name: z.string(),
 	email: z.email(),
 });

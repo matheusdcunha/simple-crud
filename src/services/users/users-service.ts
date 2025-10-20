@@ -23,14 +23,19 @@ export class UsersService {
 
 		const createdUser = await this.userRepository.createUser(user);
 
-		return { email: createdUser.email, name: createdUser.email };
+		return {
+			id: createdUser.id,
+			email: createdUser.email,
+			name: createdUser.email,
+		};
 	}
 
 	async listUsers(): Promise<UserResponseDTO[]> {
 		const rawUsers = await this.userRepository.listUsers();
 
-		const users = rawUsers.map(({ email, name }) => {
+		const users = rawUsers.map(({ id, email, name }) => {
 			return {
+				id,
 				email,
 				name,
 			};
@@ -43,8 +48,8 @@ export class UsersService {
 		const rawUser = await this.userRepository.findUserById(id);
 
 		if (rawUser) {
-			const { email, name } = rawUser;
-			const user = { email, name };
+			const { email, name, id } = rawUser;
+			const user = { id, email, name };
 
 			return user;
 		}

@@ -24,14 +24,8 @@ export class UsersController {
 	}
 
 	async listUsers(_: FastifyRequest, reply: FastifyReply) {
-		let users: UserResponseDTO[];
-
-		try {
-			const usersService = makeUsersService();
-			users = await usersService.listUsers();
-		} catch (error) {
-			return reply.status(400).send({ message: error });
-		}
+		const usersService = makeUsersService();
+		const users = await usersService.listUsers();
 
 		return reply.status(200).send({ data: users });
 	}
