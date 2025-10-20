@@ -1,17 +1,19 @@
 {
-	"name": "simple-users-crud",
+	"name": "simple-crud-api",
 	"version": "1.0.0",
-	"description": "A simple API for CRUD of users",
+	"description": "A simple CRUD API",
 	"keywords": [
-		"API"
+		"API",
+		"SIMPLE",
+		"CRUD"
 	],
-	"homepage": "https://github.com/matheusdcunha/simple-users-crud#readme",
+	"homepage": "https://github.com/matheusdcunha/simple-crud-api#readme",
 	"bugs": {
-		"url": "https://github.com/matheusdcunha/simple-users-crud/issues"
+		"url": "https://github.com/matheusdcunha/simple-crud-api/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/matheusdcunha/simple-users-crud.git"
+		"url": "git+https://github.com/matheusdcunha/simple-crud-api.git"
 	},
 	"license": "MIT",
 	"author": "Matheus da Cunha",
