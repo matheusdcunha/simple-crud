@@ -13,9 +13,11 @@ export class UsersController {
 	async createUser(request: FastifyRequest, reply: FastifyReply) {
 		const { name, email, password } = createUserBodySchema.parse(request.body);
 
+		let user: UserResponseDTO;
+
 		try {
 			const usersService = makeUsersService();
-			await usersService.createUser({ name, email, password });
+			user = await usersService.createUser({ name, email, password });
 		} catch (error) {
 			if (error instanceof UserAlreadyExistsError) {
 				return reply.status(409).send({ message: error.message });
@@ -24,7 +26,7 @@ export class UsersController {
 			throw error;
 		}
 
-		return reply.status(201).send();
+		return reply.status(201).send(user);
 	}
 
 	async listUsers(_: FastifyRequest, reply: FastifyReply) {
@@ -76,5 +78,22 @@ export class UsersController {
 		}
 
 		return reply.status(200).send(user);
+	}
+
+	async removeUser(request: FastifyRequest, reply: FastifyReply) {
+		const { id } = userIdSchema.parse(request.params);
+
+		try {
+			const usersService = makeUsersService();
+			await usersService.removeUser(id);
+		} catch (error) {
+			if (error instanceof UserNotFoundError) {
+				return reply.status(404).send({ message: error.message });
+			}
+
+			throw error;
+		}
+
+		return reply.status(200).send();
 	}
 }

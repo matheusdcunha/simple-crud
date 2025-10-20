@@ -40,4 +40,10 @@ export class PrismaUsersRepository implements UsersRepositoryInterface {
 
 		return updatedUser;
 	}
+
+	async removeUser(id: string): Promise<User> {
+		const removedUser = await prisma.user.delete({ where: { id } });
+
+		return removedUser;
+	}
 }

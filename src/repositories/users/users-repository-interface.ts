@@ -9,4 +9,5 @@ export interface UsersRepositoryInterface {
 	findUserByEmail(email: string): Promise<User | null>;
 	listUsers(): Promise<User[]>;
 	updateUser(id: string, data: UpdateUserData): Promise<User>;
+	removeUser(id: string): Promise<User>;
 }

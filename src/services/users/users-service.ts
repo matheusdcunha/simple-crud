@@ -27,7 +27,7 @@ export class UsersService {
 		return {
 			id: createdUser.id,
 			email: createdUser.email,
-			name: createdUser.email,
+			name: createdUser.name,
 		};
 	}
 
@@ -89,5 +89,21 @@ export class UsersService {
 		});
 
 		return updatedUser;
+	}
+
+	async removeUser(id: string): Promise<boolean> {
+		const userExists = await this.userRepository.findUserById(id);
+
+		if (!userExists) {
+			throw new UserNotFoundError();
+		}
+
+		const removedUser = await this.userRepository.removeUser(id);
+
+		if (!removedUser) {
+			return false;
+		}
+
+		return true;
 	}
 }

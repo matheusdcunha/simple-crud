@@ -72,4 +72,20 @@ export async function UsersRoutes(app: FastifyTypedInstance) {
 		},
 		usersController.updateUser,
 	);
+
+	app.delete(
+		"/:id",
+		{
+			schema: {
+				description: "Delete User",
+				tags: ["users"],
+				response: {
+					200: userBodySchema.describe("User deleted"),
+					404: errorSchema.describe("User not found"),
+					500: errorSchema.describe("Internal Server Error"),
+				},
+			},
+		},
+		usersController.removeUser,
+	);
 }
