@@ -1,3 +1,4 @@
+import { fastifyCors } from "@fastify/cors";
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { env } from "./env";
@@ -11,6 +12,8 @@ export const app =
 		// 	},
 		// }
 	);
+
+app.register(fastifyCors, { origin: "*" });
 
 app.register(AppRoutes);
 
