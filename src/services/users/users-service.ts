@@ -1,6 +1,7 @@
 import { hash } from "bcryptjs";
 import type { UsersRepositoryInterface } from "@/repositories/users/users-repository-interface";
 import type { CreateUserDTO } from "./dtos/create-user-dto";
+import type { UpdateUserDTO } from "./dtos/update-user-dto";
 import type { UserResponseDTO } from "./dtos/user-response-dto";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 import { UserNotFoundError } from "./errors/user-not-found-error";
@@ -55,5 +56,38 @@ export class UsersService {
 		}
 
 		throw new UserNotFoundError();
+	}
+
+	async updateUser(id: string, data: UpdateUserDTO): Promise<UserResponseDTO> {
+		const userExists = await this.userRepository.findUserById(id);
+
+		const { email, name, password } = data;
+
+		if (!userExists) {
+			throw new UserNotFoundError();
+		}
+
+		if (email) {
+			const userWithSameEmail =
+				await this.userRepository.findUserByEmail(email);
+
+			if (userWithSameEmail?.email !== email) {
+				throw new UserAlreadyExistsError();
+			}
+		}
+
+		let hashedPassword: string | undefined;
+
+		if (password) {
+			hashedPassword = await hash(password, 6);
+		}
+
+		const updatedUser = await this.userRepository.updateUser(id, {
+			email,
+			name,
+			password: hashedPassword,
+		});
+
+		return updatedUser;
 	}
 }

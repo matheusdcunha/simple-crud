@@ -2,6 +2,7 @@ import { prisma } from "@/database/prisma";
 import type { User } from "@/generated/prisma";
 import type {
 	CreateUserData,
+	UpdateUserData,
 	UsersRepositoryInterface,
 } from "./users-repository-interface";
 
@@ -32,5 +33,11 @@ export class PrismaUsersRepository implements UsersRepositoryInterface {
 		const user = await prisma.user.findFirst({ where: { id } });
 
 		return user;
+	}
+
+	async updateUser(id: string, data: UpdateUserData): Promise<User> {
+		const updatedUser = await prisma.user.update({ where: { id }, data });
+
+		return updatedUser;
 	}
 }

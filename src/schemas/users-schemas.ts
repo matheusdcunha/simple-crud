@@ -19,3 +19,9 @@ export const userBodySchema = z.object({
 export const allUsersBodySchema = z.object({
 	data: z.array(userBodySchema),
 });
+
+export const updateUserBodySchema = z.object({
+	name: z.string().optional(),
+	email: z.email().optional(),
+	password: z.string().min(4).optional(),
+});

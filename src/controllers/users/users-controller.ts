@@ -1,6 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeUsersService } from "@/factories/users/make-users-service";
-import { createUserBodySchema, userIdSchema } from "@/schemas/users-schemas";
+import {
+	createUserBodySchema,
+	updateUserBodySchema,
+	userIdSchema,
+} from "@/schemas/users-schemas";
 import type { UserResponseDTO } from "@/services/users/dtos/user-response-dto";
 import { UserAlreadyExistsError } from "@/services/users/errors/user-already-exists-error";
 import { UserNotFoundError } from "@/services/users/errors/user-not-found-error";
@@ -41,6 +45,31 @@ export class UsersController {
 		} catch (error) {
 			if (error instanceof UserNotFoundError) {
 				reply.status(404).send({ message: error.message });
+			}
+
+			throw error;
+		}
+
+		return reply.status(200).send(user);
+	}
+
+	async updateUser(request: FastifyRequest, reply: FastifyReply) {
+		const { name, email, password } = updateUserBodySchema.parse(request.body);
+
+		const { id } = userIdSchema.parse(request.params);
+
+		let user: UserResponseDTO;
+
+		try {
+			const usersService = makeUsersService();
+			user = await usersService.updateUser(id, { name, email, password });
+		} catch (error) {
+			if (error instanceof UserAlreadyExistsError) {
+				return reply.status(409).send({ message: error.message });
+			}
+
+			if (error instanceof UserNotFoundError) {
+				return reply.status(404).send({ message: error.message });
 			}
 
 			throw error;
