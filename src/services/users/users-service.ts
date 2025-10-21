@@ -7,7 +7,7 @@ import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 import { UserNotFoundError } from "./errors/user-not-found-error";
 
 export class UsersService {
-	constructor(private userRepository: UsersRepositoryInterface) {}
+	constructor(private userRepository: UsersRepositoryInterface) { }
 
 	async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
 		const { email, name, password } = data;
@@ -71,7 +71,7 @@ export class UsersService {
 			const userWithSameEmail =
 				await this.userRepository.findUserByEmail(email);
 
-			if (userWithSameEmail?.email !== email) {
+			if (userWithSameEmail && userWithSameEmail.id !== id) {
 				throw new UserAlreadyExistsError();
 			}
 		}
@@ -82,11 +82,13 @@ export class UsersService {
 			hashedPassword = await hash(password, 6);
 		}
 
-		const updatedUser = await this.userRepository.updateUser(id, {
+		const rawUpdatedUser = await this.userRepository.updateUser(id, {
 			email,
 			name,
 			password: hashedPassword,
 		});
+
+		const { password: _, ...updatedUser } = rawUpdatedUser;
 
 		return updatedUser;
 	}
