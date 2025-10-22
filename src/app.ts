@@ -15,6 +15,10 @@ import { AppRoutes } from "./routes";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
+export const API_PREFIX = "/api"
+export const SWAGGER_ROUTE = `${API_PREFIX}/docs`
+export const SCALAR_ROUTE = `${API_PREFIX}/reference`
+
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
 
@@ -30,12 +34,12 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 });
 
-app.register(AppRoutes);
+app.register(AppRoutes, { prefix: API_PREFIX });
 
-app.register(fastifySwaggerUi, { routePrefix: "/docs" });
+app.register(fastifySwaggerUi, { routePrefix: SWAGGER_ROUTE });
 
 app.register(scalarApiReference, {
-	routePrefix: "/reference",
+	routePrefix: SCALAR_ROUTE,
 	configuration: {
 		spec: {
 			url: "/docs/json",
