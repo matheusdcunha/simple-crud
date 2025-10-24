@@ -42,7 +42,7 @@ app.register(scalarApiReference, {
 	routePrefix: SCALAR_ROUTE,
 	configuration: {
 		spec: {
-			url: "/docs/json",
+			url: `${SWAGGER_ROUTE}/json`,
 		},
 	},
 });
