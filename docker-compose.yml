@@ -1,4 +1,33 @@
 services:
+  api:
+    build: .
+    container_name: api
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    environment:
+      - API_PORT=${API_PORT}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@mysql-db:3306/${DB_DATABASE}
+    restart: on-failure
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:${API_PORT}/api/v0/health', (res) => { process.exit(res.statusCode == 200 ? 0 : 1) }).on('error', (err) => { process.exit(1) })",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
   mysql-db:
     image: mysql:latest
     container_name: mysql-db

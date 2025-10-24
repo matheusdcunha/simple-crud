@@ -1,4 +1,4 @@
-import type { User } from "@/generated/prisma";
+import type { User } from "@prisma/client";
 
 export type CreateUserData = Omit<User, "id">;
 export type UpdateUserData = Partial<Omit<User, "id">>;

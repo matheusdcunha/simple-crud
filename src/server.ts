@@ -1,5 +1,6 @@
 import { API_PREFIX, app, SCALAR_ROUTE, SWAGGER_ROUTE } from "./app";
 import { env } from "./env";
+import { seed } from "./seed/seed";
 
 const port = env.API_PORT;
 

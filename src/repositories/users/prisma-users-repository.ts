@@ -1,5 +1,5 @@
+import type { User } from "@prisma/client";
 import { prisma } from "@/database/prisma";
-import type { User } from "@/generated/prisma";
 import type {
 	CreateUserData,
 	UpdateUserData,

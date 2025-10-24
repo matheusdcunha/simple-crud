@@ -1,18 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-enum Roles {
-  ADMIN
-  USER
-  GUEST
-}
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -20,30 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Roles {
+  ADMIN
+  USER
+  GUEST
+}
+
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  name     String
+  id String @id @default(uuid())
+  email String @unique
+  name String
   password String
   UserRole UserRole[]
 
   @@map("users")
 }
 
+  
+
 model Role {
-  id       Int        @id @default(autoincrement())
-  name     Roles
+  id Int @id @default(autoincrement())
+  name Roles
   UserRole UserRole[]
 
   @@map("roles")
 }
 
+  
+
 model UserRole {
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  role   Role   @relation(fields: [roleId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
   roleId Int
 
   @@id([userId, roleId])
   @@map("user_roles")
+
 }
