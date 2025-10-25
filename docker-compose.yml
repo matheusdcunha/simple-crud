@@ -2,9 +2,6 @@ services:
   api:
     build: .
     container_name: api
-    depends_on:
-      mysql-db:
-        condition: service_healthy
     ports:
       - "${API_PORT}:${API_PORT}"
     environment:
@@ -28,24 +25,15 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-  mysql-db:
-    image: mysql:latest
-    container_name: mysql-db
-    command: ["--bind-address=0.0.0.0"]
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "${DB_PORT}:3306"
-    volumes:
-      - db-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-volumes:
-  db-data:
+    networks:
+      - traefik
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.portainer.rule: "Host(`simple-crud.matheusdcunha.cloud`)"
+      traefik.http.routers.portainer.entrypoints: "websecure"
+      traefik.http.routers.portainer.tls.certresolver: "myresolver"
+      traefik.http.services.portainer.loadbalancer.server.port: "${API_PORT}"
+
+networks:
+  traefik:
+    external: true
